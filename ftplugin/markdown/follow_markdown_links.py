@@ -1,5 +1,6 @@
 import os
 import re
+import webbrowser
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -55,7 +56,9 @@ def follow_link():
 
     # if not local link then stop
     text, link = link[0]
-    if not _is_local_link(link): return
+    if not _is_local_link(link): 
+        webbrowser.open_new_tab(link)
+        return
 
     # Support [Text]() cases; Assume Text as link
     # Also assume default extension
