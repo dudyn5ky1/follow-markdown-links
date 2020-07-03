@@ -1,15 +1,15 @@
 # follow-markdown-links
 
-This vim plugin enables browsing through your markdown files by using links between them (like a personal wiki). You just have to move the cursor to a link and press ENTER.
+This vim plugin enables browsing through your markdown files by using links
+between them (like a personal wiki). You just have to move the cursor to a link
+and press ENTER.
 
-Example of links
+This version was tested only using:
 
-- `[Notes](Notes.md)` or `[Notes]()` or `[Notes](Notes)` will open Notes.md
-- `[SubNotes](sub/Notes.md)` or `[sub/Notes]()` or `[Notes](sub/Notes)` will open sub/Notes.md (if `sub` directory does not exist, the plugin will prompt for confirmation and create)
-- `[Github](https://github.com/izifortune/follow-markdown-links)`
-- `[Anchor link](#installation)`
+- Neovim with python support
+- MacOS (open files)
 
-You can press BACKSPACE to navigate to previous file (like "e#").
+If you are not using neovim or MacOS feel free to open an issue.
 
 ## Installation
 
@@ -27,9 +27,19 @@ Use your plugin manager of choice.
   - Add `Plug 'https://github.com/prashanthellina/follow-markdown-links'` to .vimrc
   - Run `:PlugInstall`
 
-## Changes
+## Usage
 
-- Added support for external links (URL)
-- Added support for file links (eg: pdf) using `open` on MacOs
-  - [ ] Check how to make it portable
-- Added support for anchor links using `https://github.com/SidOfc/mkdx`
+Press ENTER on any part of the link to follow that link
+
+Example of links
+
+- `[Notes](Notes.md)` or `[Notes]()` or `[Notes](Notes)` will open Notes.md
+- `[SubNotes](sub/Notes.md)` or `[sub/Notes]()` or `[Notes](sub/Notes)` will open sub/Notes.md (if `sub` directory does not exist, the plugin will prompt for confirmation and create)
+- `[Github](https://github.com/izifortune/follow-markdown-links)` will open a new tab on your default browser
+- `[Anchor link](#installation)`
+
+You can press BACKSPACE to navigate to previous file (like "e#").
+
+## TODO
+
+- [ ] Make `open` portable outside of MacOS
