@@ -1,6 +1,8 @@
 import os
 import re
 import webbrowser
+import subprocess
+
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -40,10 +42,9 @@ def _resolve_link(link):
     return os.path.join(buf_path, link)
 
 def _ensure_extension(link):
-    name = os.path.basename(link)
-    if '.' not in name:
+    filename, extension = os.path.splitext(link)
+    if extension == '':
         return link + '.' + DEFAULT_EXTENSION
-
     return link
 
 def follow_link():
@@ -56,10 +57,11 @@ def follow_link():
 
     # if not local link then stop
     text, link = link[0]
-    if not _is_local_link(link): 
+    if not _is_local_link(link):
         webbrowser.open_new_tab(link)
         return
 
+    original_link = link
     # Support [Text]() cases; Assume Text as link
     # Also assume default extension
     if not link: link = text
@@ -69,6 +71,15 @@ def follow_link():
     # to current file in buffer
     link = _resolve_link(link)
 
+    # Use open for file links
+    filename, extension = os.path.splitext(link)
+    if extension != '.md':
+        subprocess.call(['open', link])
+        return
+
+    # Go to header if contains #
+    if '#' in link:
+        return vim.command('call mkdx#JumpToHeader()')
     # Open if exists
     if os.path.exists(link):
         return vim.command('e %s' % link)
