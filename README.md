@@ -6,6 +6,8 @@ Example of links
 
 - `[Notes](Notes.md)` or `[Notes]()` or `[Notes](Notes)` will open Notes.md
 - `[SubNotes](sub/Notes.md)` or `[sub/Notes]()` or `[Notes](sub/Notes)` will open sub/Notes.md (if `sub` directory does not exist, the plugin will prompt for confirmation and create)
+- `[Github](https://github.com/izifortune/follow-markdown-links)`
+- `[Anchor link](#installation)`
 
 You can press BACKSPACE to navigate to previous file (like "e#").
 
@@ -24,3 +26,10 @@ Use your plugin manager of choice.
 - [vim-plug](https://github.com/junegunn/vim-plug)
   - Add `Plug 'https://github.com/prashanthellina/follow-markdown-links'` to .vimrc
   - Run `:PlugInstall`
+
+## Changes
+
+- Added support for external links (URL)
+- Added support for file links (eg: pdf) using `open` on MacOs
+  - [ ] Check how to make it portable
+- Added support for anchor links using `https://github.com/SidOfc/mkdx`
