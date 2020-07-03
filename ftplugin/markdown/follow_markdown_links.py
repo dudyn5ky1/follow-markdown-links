@@ -1,17 +1,21 @@
+import os
 import re
+import webbrowser
+import subprocess
+
 try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
 
-from vim import *
+import vim
 
 DEFAULT_EXTENSION = 'md'
 MAX_LINE_LEN = 1024
 
 def _extract_link_under_cursor():
-    _, col = current.window.cursor
-    line = current.line
+    _, col = vim.current.window.cursor
+    line = vim.current.line
 
     # skip long lines to stop hogging CPU in vim
     if len(line) >= MAX_LINE_LEN:
@@ -34,14 +38,13 @@ def _is_local_link(link):
     return not link.netloc
 
 def _resolve_link(link):
-    buf_path = os.path.dirname(current.buffer.name)
+    buf_path = os.path.dirname(vim.current.buffer.name)
     return os.path.join(buf_path, link)
 
 def _ensure_extension(link):
-    name = os.path.basename(link)
-    if '.' not in name:
+    filename, extension = os.path.splitext(link)
+    if extension == '':
         return link + '.' + DEFAULT_EXTENSION
-
     return link
 
 def follow_link():
@@ -54,8 +57,11 @@ def follow_link():
 
     # if not local link then stop
     text, link = link[0]
-    if not _is_local_link(link): return
+    if not _is_local_link(link):
+        webbrowser.open_new_tab(link)
+        return
 
+    original_link = link
     # Support [Text]() cases; Assume Text as link
     # Also assume default extension
     if not link: link = text
@@ -65,9 +71,18 @@ def follow_link():
     # to current file in buffer
     link = _resolve_link(link)
 
+    # Use open for file links
+    filename, extension = os.path.splitext(link)
+    if extension != '.md':
+        subprocess.call(['open', link])
+        return
+
+    # Go to header if contains #
+    if '#' in link:
+        return vim.command('call mkdx#JumpToHeader()')
     # Open if exists
     if os.path.exists(link):
-        return command('e %s' % link)
+        return vim.command('e %s' % link)
 
     # Directory path does not exist. Ask user to create it.
     dirpath = os.path.dirname(link)
@@ -79,4 +94,4 @@ def follow_link():
         os.makedirs(dirpath)
 
     # Open as new file
-    return command('e %s' % link)
+    return vim.command('e %s' % link)
