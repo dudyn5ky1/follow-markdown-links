@@ -1,3 +1,18 @@
+function s:isCursorOnMarkdownLink()
+  let line = getline('.')
+  let pos = getpos(".")[2]
+  let regex = '\v\[([^\[]+)\](\(.*\))'
+  let isLink = matchstrpos(line, regex)
+  if isLink[0] != ''
+    if pos >= isLink[1]
+      if  pos <= isLink[2]
+        return 1
+      endif
+    endif
+  endif
+  return 0
+endfunction
+
 if exists("*FollowLink")
     finish
 endif
@@ -11,12 +26,18 @@ if has('python3')
     python3 sys.path.append(vim.eval('expand("<sfile>:h")'))
 
     function! FollowLink()
-    python3 << endOfPython
+      if &buftype ==# 'quickfix'
+        execute "normal! \<CR>"
+      else
+        if s:isCursorOnMarkdownLink()
+          python3 << endOfPython
 
 from follow_markdown_links import follow_link
 follow_link()
 
 endOfPython
+        endif
+      endif
     endfunction
 else " python2
     python import sys
@@ -24,12 +45,14 @@ else " python2
     python sys.path.append(vim.eval('expand("<sfile>:h")'))
 
     function! FollowLink()
+      if s:isCursorOnMarkdownLink()
     python << endOfPython
 
 from follow_markdown_links import follow_link
 follow_link()
 
 endOfPython
+      endif
     endfunction
 endif
 
