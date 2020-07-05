@@ -43,3 +43,4 @@ You can press BACKSPACE to navigate to previous file (like "e#").
 ## TODO
 
 - [ ] Make `open` portable outside of MacOS
+- [ ] Support for multiple links on the same line
