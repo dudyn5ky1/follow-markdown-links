@@ -87,10 +87,10 @@ def follow_link():
     # Directory path does not exist. Ask user to create it.
     dirpath = os.path.dirname(link)
     if not os.path.exists(dirpath):
-        confirm_fn = Function('confirm')
-        msg = '"%s" does not exist. create?' % dirpath
-        result = confirm_fn(msg, "&Yes\n&No")
-        if result != 1: return
+        msg = '"%s" does not exist. create? ' % dirpath
+        vim.command('let result = input(\'%s\', \'Yes\')' % msg)
+        result = vim.eval('result')
+        if result != 'Yes': return
         os.makedirs(dirpath)
 
     # Open as new file
