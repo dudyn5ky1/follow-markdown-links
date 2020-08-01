@@ -93,5 +93,6 @@ def follow_link():
         if result != 'Yes': return
         os.makedirs(dirpath)
 
+    # TODO add the markdown link name as title
     # Open as new file
     return vim.command('e %s' % link)
