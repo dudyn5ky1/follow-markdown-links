@@ -22,13 +22,13 @@ def _extract_link_under_cursor():
         return
 
     # find the markdown link substring from line
-    start_pos = line[:col].rfind("[")
+    start_pos = line.rfind("(")
     if start_pos < 0: return
 
-    end_pos = line[col:].rfind(")")
+    end_pos = line.rfind(")")
     if end_pos < 0: return
 
-    end_pos += (col + 1)
+    start_pos += 1
 
     link = line[start_pos:end_pos]
     return link
@@ -55,11 +55,11 @@ def follow_link():
     if not link: return
 
     # extract link text and link url
-    link = re.findall(r'^\[([^]]*)\]\(([^)]*)\)$', link)
-    if not link: return
+    # link = re.findall(r'^\[([^]]*)\]\(([^)]*)\)$', link)
+    # if not link: return
 
     # if not local link then stop
-    text, link = link[0]
+    # text, link = link[0]
     if not _is_local_link(link):
         webbrowser.open_new_tab(link)
         return
@@ -67,7 +67,7 @@ def follow_link():
     original_link = link
     # Support [Text]() cases; Assume Text as link
     # Also assume default extension
-    if not link: link = text
+    # if not link: link = text
     link = _ensure_extension(link)
 
     # Resolve link (if relative) with relation
