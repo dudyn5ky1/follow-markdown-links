@@ -47,6 +47,9 @@ def _ensure_extension(link):
         return link + '.' + DEFAULT_EXTENSION
     return link
 
+def _transform_spaces(link):
+    return link.replace('%20', ' ')
+
 def follow_link():
     link = _extract_link_under_cursor()
     if not link: return
@@ -70,6 +73,9 @@ def follow_link():
     # Resolve link (if relative) with relation
     # to current file in buffer
     link = _resolve_link(link)
+
+    # Transform %20 to spaces
+    link = _transform_spaces(link)
 
     # Use open for file links
     filename, extension = os.path.splitext(link)
